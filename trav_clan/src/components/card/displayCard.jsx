@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai'
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         width: "25%",
-        height: "200px",
-        margin: "35px",
+        height: "225px",
+        margin: "30px 20px 35px 20px",
     },
     details: {
         display: 'flex',
@@ -33,11 +34,20 @@ const useStyles = makeStyles((theme) => ({
         height: 38,
         width: 38,
     },
+    BidAmount: {
+        display: 'flex !important',
+        alignItems: 'center'
+    },
+    toggle: {
+        marginLeft: "10px",
+        marginTop: "5px"
+    }
 
 }));
 
 export default function DisplayCard(props) {
-    const { user } = props
+    const { user } = props;
+    const [toggle, setToggle] = useState(false);
     const classes = useStyles();
 
     useEffect(() => {
@@ -48,6 +58,7 @@ export default function DisplayCard(props) {
                     Bids.push(bid.amount)
                 })
                 user.maxBid = Math.max(...Bids)
+                user.minBid = Math.min(...Bids)
             }
             else {
                 user.maxBid = 0;
@@ -55,8 +66,10 @@ export default function DisplayCard(props) {
         }
     }, [])
 
+    const handleToggle = () => {
+        setToggle(prev => !prev)
+    }
 
-    console.log(user.maxBid)
 
     return (
         <Card className={classes.root}>
@@ -80,9 +93,16 @@ export default function DisplayCard(props) {
                     <Typography variant="subtitle1" color="textSecondary">
                         Bids: {user.bids.length}
                     </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        Max Bid: {user.maxBid}
+                    <Typography className={classes.BidAmount} variant="subtitle1" color="textSecondary">
+                        Max Bid: {user.maxBid}<span onClick={handleToggle} className={classes.toggle}>
+                            {toggle ? (<AiFillCaretUp />) : (<AiFillCaretDown />)}
+
+                        </span>
                     </Typography>
+                    {toggle && <Typography className={classes.BidAmount} variant="subtitle1" color="textSecondary">
+                        Min Bid: {user.minBid}
+                    </Typography>}
+
                 </CardContent>
             </div>
 

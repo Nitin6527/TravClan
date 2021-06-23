@@ -3,7 +3,7 @@ import DisplayCard from './components/card/displayCard'
 import axios from 'axios';
 import Pagination from './components/pagination/pagination';
 import classes from './App.module.css';
-
+import { AiOutlineSearch } from 'react-icons/ai'
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -14,7 +14,6 @@ const App = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const users = await axios.get("https://intense-tor-76305.herokuapp.com/merchants")
-      console.log(users.data)
       setUsers(users.data)
     }
     fetchUsers()
